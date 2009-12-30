@@ -1,0 +1,7 @@
+Install condition:
+ This program requires PHP 5.2.x or higher.
+ This program requires MySQL 5.1.x or higher.
+
+Set up:
+ $ mysql -uXXX -pXXX DB_NAME < data/schema.sql
+
