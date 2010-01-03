@@ -64,3 +64,10 @@ CREATE TABLE `amazon_similar_product` (
   UNIQUE KEY (`root_asin`,`similar_asin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS test_table;
+CREATE TABLE `test_table` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
