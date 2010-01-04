@@ -6,8 +6,10 @@ class MySmarty extends Smarty
 {
   public function __construct()
   {
+    parent::__construct();
+
     $this->template_dir = dirname(__FILE__) . '/../../../templates';
     $this->compile_dir = dirname(__FILE__) . '/../../../templates_c';
-    parent::__construct();
+    $this->plugins_dir[] = dirname(__FILE__) . '/../plugins';
   }
 }
