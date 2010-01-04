@@ -35,7 +35,7 @@
 <h3>{$game.title} <a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/"><img src="/img/amazon.gif" width="20px" height="20px"></a></h3>
 <p>
 {if '' == $game.medium_image_url}
-no image
+<img src="/img/no_image.png" alt="{$game.title}" />
 {else}
 <img src="{$game.medium_image_url}" alt="{$game.title}" />
 {/if}
