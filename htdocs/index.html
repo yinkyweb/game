@@ -1,1 +1,7 @@
-this is index.html
+<?php
+// require (dirname(__FILE__) . '/../lib/smarty/libs/Smarty.class.php');
+require_once (dirname(__FILE__) . '/../lib/smarty/libs/MySmarty.class.php');
+
+$smarty = new MySmarty();
+$smarty->assign('foo', 'bar');
+$smarty->display('index.tpl');
