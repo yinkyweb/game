@@ -32,13 +32,24 @@
 
 {foreach from=$new_games item=game}
 <div>
-<h3>{$game.title}</h3>
+<h3>{$game.title} <a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/"><img src="/img/amazon.gif" width="20px" height="20px"></a></h3>
 <p>
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/">amazonで購入</a>
+{if '' == $game.medium_image_url}
+no image
+{else}
 <img src="{$game.medium_image_url}" alt="{$game.title}" />
+{/if}
 </p>
-</div>
+{$game.brand}<br />
+{$game.default_price|number_format}<br />
+{$game.amazon_price|number_format}<br />
+{$game.lowest_new_price|number_format}<br />
+{$game.lowest_used_price|number_format}<br />
+{$game.japanese_name}<br />
 
+{$game.release_at}<br />
+
+</div>
 {/foreach}
 
 <p>&nbsp;</p>
