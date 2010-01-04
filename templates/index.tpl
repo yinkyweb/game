@@ -7,7 +7,72 @@
 </head>
 
 <body>
-hi, hello!
+
+<!-- container -->
+<div id="container">
+
+<!-- header -->
+<div id="header"><a href="/"><img src="/img/clear.gif" alt="" style="width: 386px; height: 52px;" /></a></div>
+<!-- //header -->
+
+<!-- top_navi -->
+<div id="top_navi">
+<h1>ゲームレビューしますよ</h1>
+<p>
+ふがふが。
+</p>
+</div>
+
+<!-- //top_navi -->
+
+<!-- left_box -->
+<div id="left_box">
+<h2>ゲーム情報</h2>
+</p>
+
+{foreach from=$new_games item=game}
+<div>
+<h3>{$game.title}</h3>
+<p>
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/">amazonで購入</a>
+<img src="{$game.medium_image_url}" alt="{$game.title}" />
+</p>
+</div>
+
+{/foreach}
+
+<p>&nbsp;</p>
+
+</div>
+<!-- //left_box -->
+
+<!-- right_box -->
+<div id="right_box">
+
+<h3>ナビゲーション</h3>
+
+<ul>
+<li><a href="/">ナビゲーション入れていきますよ。</a></li>
+</ul>
+
+<p>&nbsp;</p>
+
+</div>
+<!-- //right_box -->
+
+<!-- bottom_navi -->
+<div id="bottom_navi">
+<p>
+Copyright(C) yinkyweb.org All Rights Reserved.
+</p>
+
+</div>
+
+<!-- //bottom_navi -->
+
+</div>
+<!-- //container -->
+
 </body>
 
 </html>
