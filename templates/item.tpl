@@ -71,6 +71,9 @@ Copyright(C) yinkyweb.org All Rights Reserved.
 </div>
 <!-- //container -->
 
+{* analytics *}
+{include file='components/analytics.tpl'}
+
 </body>
 
 </html>

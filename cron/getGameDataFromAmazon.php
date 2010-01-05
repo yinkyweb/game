@@ -15,6 +15,10 @@ try {
 $title_list = file(dirname(__FILE__) . '/gamelist.txt');
 foreach ($title_list as $title) {
   $title = trim($title);
+  // debug
+  if ('__EXIT__' === $title) {
+    break;
+  }
   if ('' === $title) {
     continue;
   }
@@ -112,6 +116,8 @@ VALUES
 
 function insert_amazon_similar_product($dbh, $item)
 {
+  // echo "similar: prev_check\n";
+  // var_dump($item->SimilarProducts->SimilarProduct);
   if (isset($item->SimilarProducts->SimilarProduct)) {
     foreach ($item->SimilarProducts->SimilarProduct as $similar_product) {
       $sql = 'SELECT id FROM amazon_similar_product WHERE root_asin = :ROOT_ASIN AND SIMILAR_ASIN = :SIMILAR_ASIN';
@@ -122,14 +128,19 @@ function insert_amazon_similar_product($dbh, $item)
       if ($sth->fetch()) {
         // UPDATE
         // do nothing
+        // echo "similar: update\n";
       } else {
         // INSERT
+        // echo "similar: insert\n";
         $sql = '
 INSERT INTO amazon_similar_product
  (root_asin, similar_asin, created_at)
 VALUES
  (:ROOT_ASIN, :SIMILAR_ASIN, :CREATED_AT)
 ';
+        // var_dump($item->ASIN);
+        // var_dump($similar_product->ASIN);
+
         $sth = $dbh->prepare($sql);
         $sth->bindParam(':ROOT_ASIN', $item->ASIN, PDO::PARAM_STR);
         $sth->bindParam(':SIMILAR_ASIN', $similar_product->ASIN, PDO::PARAM_STR);
