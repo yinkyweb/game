@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" dir="ltr">
 
 <head>
-{include file='components/head.tpl' title='game review'}
+{include file='components/head.tpl' title='ゲームスペース - トップ'}
 </head>
 
 <body>
@@ -28,18 +28,19 @@
 <!-- left_box -->
 <div id="left_box">
 <h2>ゲーム情報</h2>
-</p>
 
 {foreach from=$new_games item=game}
 <div>
 
 <h3>{$game.title|mb_truncate:25:"...":true} <a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/" rel="nofollow"><img src="/img/amazon.gif" width="20px" height="20px"></a></h3>
 <p>
+<a href="/item.php?asin={$game.asin}">
 {if '' == $game.medium_image_url}
 <img src="/img/no_image.png" alt="{$game.title}" />
 {else}
 <img src="{$game.medium_image_url}" alt="{$game.title}" />
 {/if}
+</a>
 </p>
 
 <table>
@@ -73,7 +74,8 @@
  <td>{$game.amazon_price|number_format}円</td>
 </tr>
 {/if}
-{if '' != $game.lowest_new_price}
+{if '' != $game.lowest_new_price
+ && $game.lowest_new_price != $game.amazon_price}
 <tr>
  <th>新品最安値</th>
  <td>{$game.lowest_new_price|number_format}円</td>
@@ -121,6 +123,16 @@ Copyright(C) yinkyweb.org All Rights Reserved.
 
 </div>
 <!-- //container -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11422352-4");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 
 </body>
 
