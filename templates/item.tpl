@@ -36,7 +36,7 @@
 {$review.total_vote}<br />
 {$review.title}<br />
 {$review.article}<br />
-comment_at: {$review.-comment_at}<br />
+comment_at: {$review.comment_at}<br />
 
 </div>
 {/foreach}
