@@ -37,14 +37,42 @@ foreach ($title_list as $title) {
 
 function insert_amazon_product($dbh, $item, $conf)
 {
-  $sql = '
-INSERT INTO amazon_product
- (asin, title, small_image_url, medium_image_url, large_image_url, brand, platform, default_price, amazon_price, lowest_new_price, lowest_used_price, ean, release_at, created_at)
-VALUES
- (:ASIN, :TITLE, :SMALL_IMAGE_URL, :MEDIUM_IMAGE_URL, :LARGE_IMAGE_URL, :BRAND, :PLATFORM, :DEFAULT_PRICE, :AMAZON_PRICE, :LOWEST_NEW_PRICE, :LOWEST_USED_PRICE, :EAN, :RELEASE_AT, :CREATED_AT)
-';
-
+  $sql = 'SELECT id FROM amazon_product WHERE asin = :ASIN';
   $sth = $dbh->prepare($sql);
+  $sth->bindParam(':ASIN', $item->ASIN, PDO::PARAM_STR);
+  $sth->execute();
+  if ($sth->fetch()) {
+    // UPDATE
+    $sql = '
+UPDATE amazon_product
+SET
+ title = :TITLE,
+ small_image_url = :SMALL_IMAGE_URL, medium_image_url = :MEDIUM_IMAGE_URL, large_image_url = :LARGE_IMAGE_URL,
+ brand = :BRAND, platform = :PLATFORM,
+ default_price = :DEFAULT_PRICE, amazon_price = :AMAZON_PRICE, lowest_new_price = :LOWEST_NEW_PRICE, lowest_used_price = :LOWEST_USED_PRICE,
+ ean = :EAN,
+ release_at = :RELEASE_AT, updated_at = :UPDATED_AT
+ average_review_rating = :AVERAGE_REVIEW_RATING, total_review_num = :TOTAL_REVIEW_NUM
+WHERE
+ asin = :ASIN
+';
+    $sth = $dbh->prepare($sql);
+    $tdate = date('Y-m-d H:i:s');
+    $sth->bindParam(':UPDATED_AT', $tdate, PDO::PARAM_STR);
+  } else {
+    // INSERT
+    $sql = '
+INSERT INTO amazon_product
+ (asin, title, small_image_url, medium_image_url, large_image_url, brand, platform, default_price, amazon_price, lowest_new_price, lowest_used_price, ean, release_at, created_at, average_review_rating, total_review_num)
+VALUES
+ (:ASIN, :TITLE, :SMALL_IMAGE_URL, :MEDIUM_IMAGE_URL, :LARGE_IMAGE_URL, :BRAND, :PLATFORM, :DEFAULT_PRICE, :AMAZON_PRICE, :LOWEST_NEW_PRICE, :LOWEST_USED_PRICE, :EAN, :RELEASE_AT, :CREATED_AT, :AVERAGE_REVIEW_RATING, :TOTAL_REVIEW_NUM)
+';
+    $sth = $dbh->prepare($sql);
+    $tdate = date('Y-m-d H:i:s');
+    $sth->bindParam(':CREATED_AT', $tdate, PDO::PARAM_STR);
+  }
+
+  // $sth = $dbh->prepare($sql);
   $sth->bindParam(':ASIN', $item->ASIN, PDO::PARAM_STR);
   $sth->bindParam(':TITLE', $item->ItemAttributes->Title, PDO::PARAM_STR);
   $sth->bindParam(':SMALL_IMAGE_URL', $item->SmallImage->URL, PDO::PARAM_STR);
@@ -57,9 +85,13 @@ VALUES
   $sth->bindParam(':LOWEST_NEW_PRICE', @$item->OfferSummary->LowestNewPrice->Amount, PDO::PARAM_INT);
   $sth->bindParam(':LOWEST_USED_PRICE', @$item->OfferSummary->LowestUsedPrice->Amount, PDO::PARAM_INT);
   $sth->bindParam(':EAN', $item->ItemAttributes->EAN, PDO::PARAM_STR);
-  $tdate = date('Y-m-d H:i:s');
+  // $tdate = date('Y-m-d H:i:s');
   $sth->bindParam(':RELEASE_AT', $item->ItemAttributes->ReleaseDate, PDO::PARAM_STR);
-  $sth->bindParam(':CREATED_AT', $tdate, PDO::PARAM_STR);
+
+  $sth->bindParam(':AVERAGE_REVIEW_RATING', $item->CustomerReviews->AverageRating);
+  $sth->bindParam(':TOTAL_REVIEW_NUM', $item->CustomerReviews->TotalReviews, PDO::PARAM_INT);
+
+  // $sth->bindParam(':CREATED_AT', $tdate, PDO::PARAM_STR);
 
   $sth->execute();
 }
@@ -116,8 +148,6 @@ VALUES
 
 function insert_amazon_similar_product($dbh, $item)
 {
-  // echo "similar: prev_check\n";
-  // var_dump($item->SimilarProducts->SimilarProduct);
   if (isset($item->SimilarProducts->SimilarProduct)) {
     foreach ($item->SimilarProducts->SimilarProduct as $similar_product) {
       $sql = 'SELECT id FROM amazon_similar_product WHERE root_asin = :ROOT_ASIN AND SIMILAR_ASIN = :SIMILAR_ASIN';
@@ -138,9 +168,6 @@ INSERT INTO amazon_similar_product
 VALUES
  (:ROOT_ASIN, :SIMILAR_ASIN, :CREATED_AT)
 ';
-        // var_dump($item->ASIN);
-        // var_dump($similar_product->ASIN);
-
         $sth = $dbh->prepare($sql);
         $sth->bindParam(':ROOT_ASIN', $item->ASIN, PDO::PARAM_STR);
         $sth->bindParam(':SIMILAR_ASIN', $similar_product->ASIN, PDO::PARAM_STR);
