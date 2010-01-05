@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" dir="ltr">
 
 <head>
-{include file='components/head.tpl' title='ゲームスペース - トップ'}
+{include file='components/head.tpl' title='ゲーマーズ図書館 - トップ'}
 </head>
 
 <body>

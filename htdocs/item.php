@@ -14,19 +14,33 @@ try {
   echo 'Connection failed: ' . $exception->getMessage();
 }
 
-/*
-  `asin` varchar(10) NOT NULL,
-  `amazon_customer_id` varchar(48) NOT NULL,
-  `amazon_customer_name` varchar(255) DEFAULT NULL,
-  `rating` int(11) NOT NULL,
-  `helpful_vote` int(11) DEFAULT NULL,
-  `total_vote` int(11) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  `article` text NOT NULL,
-  `comment_at` date DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
- */
+$sql = '
+SELECT
+ product.title title,
+ product.description description,
+ product.medium_image_url medium_image_url,
+ product.large_image_url large_image_url,
+ product.brand brand,
+ product.default_price default_price,
+ product.amazon_price amazon_price,
+ product.lowest_new_price lowest_new_price,
+ product.lowest_used_price lowest_used_price,
+ DATE_FORMAT(product.release_at, :DATE_FORMAT) release_at,
+ platform.japanese_name japanese_name
+FROM
+ amazon_product product
+LEFT JOIN
+  amazon_platform platform
+ ON
+  product.platform = platform.amazon_platform_id
+WHERE asin = :ASIN
+';
+$sth = $dbh->prepare($sql);
+$sth->bindParam(':ASIN', $_GET['asin'], PDO::PARAM_STR);
+$format_str = '%Y年%m月%d日';
+$sth->bindParam(':DATE_FORMAT', $format_str, PDO::PARAM_STR);
+$sth->execute();
+$game = $sth->fetch();
 
 $sql = '
 SELECT
@@ -48,10 +62,9 @@ $sth->bindParam(':DATE_FORMAT', $format_str, PDO::PARAM_STR);
 $sth->execute();
 $game_reviews = $sth->fetchAll();
 
-// var_dump($game_reviews);
-
 $smarty = new MySmarty();
 $smarty->assign('conf', $conf);
+$smarty->assign('game', $game);
 $smarty->assign('game_reviews', $game_reviews);
 $smarty->assign('asin', $_GET['asin']);
 $smarty->display('item.tpl');

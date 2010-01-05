@@ -25,7 +25,7 @@ SELECT
  product.lowest_new_price lowest_new_price,
  product.lowest_used_price lowest_used_price,
  DATE_FORMAT(product.release_at, :DATE_FORMAT) release_at,
- platform.japanese_name
+ platform.japanese_name japanese_name
 FROM
  amazon_product product
 LEFT JOIN
