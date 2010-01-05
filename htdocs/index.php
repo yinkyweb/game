@@ -14,8 +14,6 @@ try {
   echo 'Connection failed: ' . $exception->getMessage();
 }
 
-// $sql = 'select * from amazon_product where release_at > CURDATE() order by release_at asc';
-// $sql = 'SELECT * FROM amazon_product WHERE release_at > CURDATE() ORDER BY release_at ASC LIMIT 20';
 $sql = '
 SELECT
  product.asin asin,
@@ -26,7 +24,7 @@ SELECT
  product.amazon_price amazon_price,
  product.lowest_new_price lowest_new_price,
  product.lowest_used_price lowest_used_price,
- product.release_at release_at,
+ DATE_FORMAT(product.release_at, :DATE_FORMAT) release_at,
  platform.japanese_name
 FROM
  amazon_product product
@@ -38,6 +36,8 @@ WHERE product.release_at > CURDATE()
 ORDER BY product.release_at ASC LIMIT 20
 ';
 $sth = $dbh->prepare($sql);
+$format_str = '%Y年%m月%d日';
+$sth->bindParam(':DATE_FORMAT', $format_str, PDO::PARAM_STR);
 $sth->execute();
 $new_games = $sth->fetchAll();
 

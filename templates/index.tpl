@@ -32,7 +32,8 @@
 
 {foreach from=$new_games item=game}
 <div>
-<h3>{$game.title|mb_truncate:25:"...":true} <a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/"><img src="/img/amazon.gif" width="20px" height="20px"></a></h3>
+
+<h3>{$game.title|mb_truncate:25:"...":true} <a href="http://www.amazon.co.jp/exec/obidos/ASIN/{$game.asin}/{$conf.amazon.associate_id}/ref=nosim/" rel="nofollow"><img src="/img/amazon.gif" width="20px" height="20px"></a></h3>
 <p>
 {if '' == $game.medium_image_url}
 <img src="/img/no_image.png" alt="{$game.title}" />
@@ -40,14 +41,51 @@
 <img src="{$game.medium_image_url}" alt="{$game.title}" />
 {/if}
 </p>
-{$game.brand}<br />
-{$game.default_price|number_format}<br />
-{$game.amazon_price|number_format}<br />
-{$game.lowest_new_price|number_format}<br />
-{$game.lowest_used_price|number_format}<br />
-{$game.japanese_name}<br />
 
-{$game.release_at}<br />
+<table>
+{if '' != $game.brand}
+<tr>
+ <th>ブランド</th>
+ <td>{$game.brand}</td>
+</tr>
+{/if}
+{if '' != $game.japanese_name}
+<tr>
+ <th>プラットフォーム</th>
+ <td>{$game.japanese_name}</td>
+</tr>
+{/if}
+{if '' != $game.release_at}
+<tr>
+ <th>発売予定日</th>
+ <td>{$game.release_at}</td>
+</tr>
+{/if}
+{if '' != $game.price}
+<tr>
+ <th>定価</th>
+ <td>{$game.price}円</td>
+</tr>
+{/if}
+{if '' != $game.amazon_price}
+<tr>
+ <th>アマゾン価格</th>
+ <td>{$game.amazon_price|number_format}円</td>
+</tr>
+{/if}
+{if '' != $game.lowest_new_price}
+<tr>
+ <th>新品最安値</th>
+ <td>{$game.lowest_new_price|number_format}円</td>
+</tr>
+{/if}
+{if '' != $game.lowest_used_price}
+<tr>
+ <th>中古最安値</th>
+ <td>{$game.lowest_used_price|number_format}円</td>
+</tr>
+{/if}
+</table>
 
 </div>
 {/foreach}
